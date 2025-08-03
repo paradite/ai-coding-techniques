@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600&display=swap');
+
+/* define variables of the viz */
+:root {
+  --viz-width-desktop: 630px;
+  --viz-width-mobile: 100vw;
+  --margin-left: 110px;
+  --margin-right: 80px;
+  --notes-width-desktop: calc(
+    var(--viz-width-desktop) - var(--margin-left) - var(--margin-right)
+  );
+  --viz-height-desktop: 300px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* center in the viewport */
+body {
+  display: flex;
+  min-height: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  background: hsl(230, 29%, 19%);
+  color: hsl(184, 30%, 85%);
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 0;
+  font-weight: 300;
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+}
+
+/* cap the width of the visualization */
+svg {
+  width: var(--viz-width-desktop);
+  max-width: var(--viz-width-desktop);
+  height: var(--viz-height-desktop);
+}
+
+/* Base SVG text styles */
+svg text {
+  font-family: 'IBM Plex Mono', monospace;
+  fill: currentColor;
+  text-shadow: 0 0 1px hsla(0, 0%, 0%, 0.35);
+  letter-spacing: 0.01rem;
+  font-size: 0.7rem;
+  font-weight: 300;
+}
+
+text {
+  fill: hsl(184, 30%, 85%);
+}
+
+/* Data point labels */
+.name {
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.05rem;
+}
+
+/* Quadrant labels */
+.quadrant-label {
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.05rem;
+  fill: hsl(184, 30%, 85%);
+}
+
+.notes {
+  width: var(--notes-width-desktop);
+  max-width: 100%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.03rem;
+  opacity: 0.9;
+  padding: 0 20px;
+}
+
+.notes p {
+  margin-bottom: 6px;
+}
+
+/* small screen */
+@media (max-width: 767px) {
+  body {
+    padding: 20px 0;
+  }
+
+  h1 {
+    margin-left: 0;
+    font-size: 1rem;
+  }
+
+  svg {
+    width: var(--viz-width-mobile);
+    height: 200px;
+  }
+
+  /* Increase font size for data points on mobile */
+  svg text.name {
+    font-size: 0.9rem !important;
+    font-weight: 500;
+  }
+
+  /* Increase quadrant label size on mobile */
+  .quadrant-label {
+    font-size: 0.9rem;
+  }
+
+  .notes {
+    margin-top: 12px;
+    font-size: 0.6rem;
+  }
+}
+
+.viz {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
