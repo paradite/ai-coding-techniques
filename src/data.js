@@ -2,39 +2,44 @@ export function generateData() {
   return [
     // Input and context management techniques
     {
-      name: 'Prompt Engineering',
-      category: 'Input and context management',
-      x: 2.1, // Mature (right side)
+      name: "Prompt Engineering",
+      category: "Input and context management",
+      x: 1.9, // Mature (right side)
       y: 2.1, // Effective (top)
-      status: 'mature',
+      maturity: "mature",
+      effectiveness: "effective",
     },
     {
-      name: 'RAG',
-      category: 'Input and context management',
-      x: 1.8, // Mature (right side)
-      y: 1.9, // Effective (top)
-      status: 'mature',
+      name: "RAG",
+      category: "Input and context management",
+      x: 1.75, // Mature (right side)
+      y: 1.75, // Effective (top)
+      maturity: "mature",
+      effectiveness: "effective",
     },
     {
-      name: 'Context Engineering',
-      category: 'Input and context management',
-      x: 1.0, // Emerging (left side)
-      y: 1.8, // Effective (top)
-      status: 'emerging',
-    },
-    {
-      name: 'Rules / AGENT.md',
-      category: 'Input and context management',
+      name: "Context Engineering",
+      category: "Input and context management",
       x: 0.9, // Emerging (left side)
-      y: 1.1, // Limited Effectiveness (bottom)
-      status: 'emerging',
+      y: 1.9, // Effective (top)
+      maturity: "emerging",
+      effectiveness: "effective",
     },
     {
-      name: 'Knowledge / Memory',
-      category: 'Input and context management',
-      x: 1.1, // Emerging (left side)
+      name: "Rules / AGENT.md",
+      category: "Input and context management",
+      x: 0.9, // Emerging (left side)
+      y: 1.2, // Limited Effectiveness (bottom)
+      maturity: "emerging",
+      effectiveness: "limited",
+    },
+    {
+      name: "Knowledge / Memory",
+      category: "Input and context management",
+      x: 0.95, // Emerging (left side)
       y: 0.9, // Limited Effectiveness (bottom)
-      status: 'emerging',
+      maturity: "emerging",
+      effectiveness: "limited",
     },
   ];
 }

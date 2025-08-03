@@ -2,14 +2,16 @@
 
 /* define variables of the viz */
 :root {
-  --viz-width-desktop: 630px;
+  --viz-width-desktop: 900px;
   --viz-width-mobile: 100vw;
-  --margin-left: 110px;
-  --margin-right: 80px;
+  --viz-height-desktop: 500px;
+  --margin-top: 40px;
+  --margin-right: 40px;
+  --margin-bottom: 60px;
+  --margin-left: 120px;
   --notes-width-desktop: calc(
     var(--viz-width-desktop) - var(--margin-left) - var(--margin-right)
   );
-  --viz-height-desktop: 300px;
 }
 
 * {
@@ -33,11 +35,12 @@ body {
 
 .container {
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 h1 {
   text-align: center;
+  margin-top: 20px;
   margin-bottom: 0;
   font-weight: 300;
   font-size: 1rem;
@@ -68,14 +71,14 @@ text {
 
 /* Data point labels */
 .name {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.05rem;
 }
 
 /* Quadrant labels */
 .quadrant-label {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.05rem;
   fill: hsl(184, 30%, 85%);
@@ -97,6 +100,16 @@ text {
 
 .notes p {
   margin-bottom: 6px;
+}
+
+.notes a {
+  color: hsl(184, 30%, 70%);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.notes a:hover {
+  color: hsl(184, 40%, 80%);
 }
 
 /* small screen */
