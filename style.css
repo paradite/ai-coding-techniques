@@ -125,18 +125,29 @@ text {
 
   svg {
     width: var(--viz-width-mobile);
-    height: 200px;
+    height: 300px;
   }
 
-  /* Increase font size for data points on mobile */
+  /* Reduce font size for data points on mobile */
   svg text.name {
-    font-size: 0.9rem !important;
+    font-size: 0.6rem !important;
     font-weight: 500;
   }
 
-  /* Increase quadrant label size on mobile */
+  /* Adjust position for better readability */
+  .name {
+    transform: translate(2px, 0);
+  }
+
+  /* Reduce quadrant label size on mobile */
   .quadrant-label {
-    font-size: 0.9rem;
+    font-size: 0.65rem;
+    font-weight: 500;
+  }
+
+  /* Reduce axis label size on mobile */
+  svg text[fill="hsl(184, 30%, 65%)"] {
+    font-size: 0.65rem !important;
   }
 
   .notes {

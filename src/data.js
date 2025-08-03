@@ -29,7 +29,7 @@ export function generateData() {
       name: "Rules / AGENT.md",
       category: "Input and context management",
       x: 0.9, // Emerging (left side)
-      y: 1.2, // Limited Effectiveness (bottom)
+      y: 1.15, // Limited Effectiveness (bottom)
       maturity: "emerging",
       effectiveness: "limited",
     },
@@ -37,7 +37,7 @@ export function generateData() {
       name: "Knowledge / Memory",
       category: "Input and context management",
       x: 0.95, // Emerging (left side)
-      y: 0.9, // Limited Effectiveness (bottom)
+      y: 0.85, // Limited Effectiveness (bottom)
       maturity: "emerging",
       effectiveness: "limited",
     },

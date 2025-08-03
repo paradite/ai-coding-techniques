@@ -2,18 +2,19 @@ import { generateData } from "./data.js";
 
 const data = generateData();
 
-// Get CSS variables
+// Get CSS variables and detect mobile
 const rootStyles = getComputedStyle(document.documentElement);
+const isMobile = window.innerWidth <= 767;
+
 const margin = {
   top: parseInt(rootStyles.getPropertyValue("--margin-top")),
-  right: parseInt(rootStyles.getPropertyValue("--margin-right")),
+  right: isMobile ? 20 : parseInt(rootStyles.getPropertyValue("--margin-right")),
   bottom: parseInt(rootStyles.getPropertyValue("--margin-bottom")),
-  left: parseInt(rootStyles.getPropertyValue("--margin-left")),
+  left: isMobile ? 20 : parseInt(rootStyles.getPropertyValue("--margin-left")),
 };
-const totalWidth = parseInt(rootStyles.getPropertyValue("--viz-width-desktop"));
-const totalHeight = parseInt(
-  rootStyles.getPropertyValue("--viz-height-desktop")
-);
+
+const totalWidth = isMobile ? window.innerWidth : parseInt(rootStyles.getPropertyValue("--viz-width-desktop"));
+const totalHeight = isMobile ? 300 : parseInt(rootStyles.getPropertyValue("--viz-height-desktop"));
 const width = totalWidth - margin.left - margin.right;
 const height = totalHeight - margin.top - margin.bottom;
 
@@ -115,30 +116,52 @@ g.append("text")
   .style("font-size", "0.7rem")
   .text("Mature");
 
-// Y-axis labels (horizontal)
-const limitedText = g
-  .append("text")
-  .attr("x", -10)
-  .attr("y", (3 * height) / 4)
-  .attr("text-anchor", "end")
-  .attr("fill", "hsl(184, 30%, 65%)")
-  .style("font-size", "0.7rem");
+// Y-axis labels (responsive)
+if (isMobile) {
+  // Vertical labels for mobile
+  g.append("text")
+    .attr("x", -5)
+    .attr("y", (3 * height) / 4)
+    .attr("text-anchor", "middle")
+    .attr("fill", "hsl(184, 30%, 65%)")
+    .style("font-size", "0.65rem")
+    .attr("transform", `rotate(-90, -5, ${(3 * height) / 4})`)
+    .text("Limited");
 
-limitedText.append("tspan").attr("x", -10).attr("dy", 0).text("Limited");
+  g.append("text")
+    .attr("x", -5)
+    .attr("y", height / 4)
+    .attr("text-anchor", "middle")
+    .attr("fill", "hsl(184, 30%, 65%)")
+    .style("font-size", "0.65rem")
+    .attr("transform", `rotate(-90, -5, ${height / 4})`)
+    .text("Effective");
+} else {
+  // Horizontal labels for desktop
+  const limitedText = g
+    .append("text")
+    .attr("x", -10)
+    .attr("y", (3 * height) / 4)
+    .attr("text-anchor", "end")
+    .attr("fill", "hsl(184, 30%, 65%)")
+    .style("font-size", "0.7rem");
 
-limitedText
-  .append("tspan")
-  .attr("x", -10)
-  .attr("dy", "1.0em")
-  .text("Effectiveness");
+  limitedText.append("tspan").attr("x", -10).attr("dy", 0).text("Limited");
 
-g.append("text")
-  .attr("x", -10)
-  .attr("y", height / 4)
-  .attr("text-anchor", "end")
-  .attr("fill", "hsl(184, 30%, 65%)")
-  .style("font-size", "0.7rem")
-  .text("Effective");
+  limitedText
+    .append("tspan")
+    .attr("x", -10)
+    .attr("dy", "1.0em")
+    .text("Effectiveness");
+
+  g.append("text")
+    .attr("x", -10)
+    .attr("y", height / 4)
+    .attr("text-anchor", "end")
+    .attr("fill", "hsl(184, 30%, 65%)")
+    .style("font-size", "0.7rem")
+    .text("Effective");
+}
 
 // Data points
 const points = g
@@ -148,7 +171,7 @@ const points = g
   .append("circle")
   .attr("cx", (d) => xScale(d.x))
   .attr("cy", (d) => yScale(d.y))
-  .attr("r", 6)
+  .attr("r", isMobile ? 7 : 6)
   .attr("fill", (d) =>
     d.effectiveness === "effective" ? "hsl(132, 60%, 60%)" : "hsl(43, 85%, 65%)"
   )
@@ -161,7 +184,7 @@ g.selectAll(".point-label")
   .enter()
   .append("text")
   .attr("class", "name")
-  .attr("x", (d) => xScale(d.x) + 15)
+  .attr("x", (d) => xScale(d.x) + (isMobile ? 8 : 15))
   .attr("y", (d) => yScale(d.y) + 3)
   .attr("text-anchor", "start")
   .text((d) => d.name)
@@ -172,10 +195,11 @@ g.selectAll(".point-label")
       text.text("");
       const lines = [];
       let currentLine = [];
+      const maxLineLength = isMobile ? 12 : 18;
 
       words.forEach((word) => {
         currentLine.push(word);
-        if (currentLine.join(" ").length > 18) {
+        if (currentLine.join(" ").length > maxLineLength) {
           if (currentLine.length > 1) {
             currentLine.pop();
             lines.push(currentLine.join(" "));
@@ -193,7 +217,7 @@ g.selectAll(".point-label")
       lines.forEach((line, i) => {
         text
           .append("tspan")
-          .attr("x", xScale(d.x) + 15)
+          .attr("x", xScale(d.x) + (isMobile ? 8 : 15))
           .attr("dy", i === 0 ? 0 : "1.0em")
           .text(line);
       });
@@ -216,3 +240,11 @@ g.append("line")
   .attr("y2", height / 2)
   .attr("stroke", "hsl(184, 30%, 25%)")
   .attr("stroke-width", 1);
+
+// Handle window resize for responsive behavior
+window.addEventListener('resize', () => {
+  const newIsMobile = window.innerWidth <= 767;
+  if (newIsMobile !== isMobile) {
+    location.reload(); // Simple reload for mobile/desktop switch
+  }
+});
