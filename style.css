@@ -2,13 +2,13 @@
 
 /* define variables of the viz */
 :root {
-  --viz-width-desktop: 900px;
+  --viz-width-desktop: 920px;
   --viz-width-mobile: 100vw;
-  --viz-height-desktop: 500px;
+  --viz-height-desktop: 460px;
   --viz-height-mobile: 380px;
   --margin-top: 40px;
   --margin-right: 40px;
-  --margin-bottom: 60px;
+  --margin-bottom: 40px;
   --margin-left: 120px;
   --margin-right-desktop: 160px; /* 40px + 120px for legend */
   --margin-bottom-mobile: 80px; /* 60px + 80px for legend */

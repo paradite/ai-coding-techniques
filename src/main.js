@@ -2,10 +2,10 @@ import { generateData } from "./data.js";
 
 // Color scheme for categories
 const categoryColors = {
-  input: 'hsl(260, 60%, 65%)', // Purple
-  context: 'hsl(195, 60%, 65%)', // Blue
-  tools: 'hsl(120, 60%, 60%)', // Green
-  agents: 'hsl(30, 85%, 65%)', // Orange
+  input: "hsl(260, 60%, 65%)", // Purple
+  context: "hsl(195, 60%, 65%)", // Blue
+  tools: "hsl(120, 60%, 60%)", // Green
+  agents: "hsl(30, 85%, 65%)", // Orange
 };
 
 const data = generateData();
@@ -16,13 +16,21 @@ const isMobile = window.innerWidth <= 767;
 
 const margin = {
   top: parseInt(rootStyles.getPropertyValue("--margin-top")),
-  right: isMobile ? 20 : parseInt(rootStyles.getPropertyValue("--margin-right-desktop")),
-  bottom: isMobile ? parseInt(rootStyles.getPropertyValue("--margin-bottom-mobile")) : parseInt(rootStyles.getPropertyValue("--margin-bottom")),
+  right: isMobile
+    ? 20
+    : parseInt(rootStyles.getPropertyValue("--margin-right-desktop")),
+  bottom: isMobile
+    ? parseInt(rootStyles.getPropertyValue("--margin-bottom-mobile"))
+    : parseInt(rootStyles.getPropertyValue("--margin-bottom")),
   left: isMobile ? 20 : parseInt(rootStyles.getPropertyValue("--margin-left")),
 };
 
-const totalWidth = isMobile ? window.innerWidth : parseInt(rootStyles.getPropertyValue("--viz-width-desktop"));
-const totalHeight = isMobile ? parseInt(rootStyles.getPropertyValue("--viz-height-mobile")) : parseInt(rootStyles.getPropertyValue("--viz-height-desktop"));
+const totalWidth = isMobile
+  ? window.innerWidth
+  : parseInt(rootStyles.getPropertyValue("--viz-width-desktop"));
+const totalHeight = isMobile
+  ? parseInt(rootStyles.getPropertyValue("--viz-height-mobile"))
+  : parseInt(rootStyles.getPropertyValue("--viz-height-desktop"));
 const width = totalWidth - margin.left - margin.right;
 const height = totalHeight - margin.top - margin.bottom;
 
@@ -93,19 +101,49 @@ g.append("text")
   .attr("text-anchor", "middle")
   .text("Mature & Effective");
 
-g.append("text")
+const emergingLimitedLabel = g
+  .append("text")
   .attr("class", "quadrant-label")
   .attr("x", width / 4)
   .attr("y", height / 2 + 20)
-  .attr("text-anchor", "middle")
-  .text("Emerging & Limited");
+  .attr("text-anchor", "middle");
 
-g.append("text")
+if (isMobile) {
+  emergingLimitedLabel
+    .append("tspan")
+    .attr("x", width / 4)
+    .attr("dy", 0)
+    .text("Emerging &");
+  emergingLimitedLabel
+    .append("tspan")
+    .attr("x", width / 4)
+    .attr("dy", "1.0em")
+    .text("Limited Effectiveness");
+} else {
+  emergingLimitedLabel.text("Emerging & Limited Effectiveness");
+}
+
+const matureLimitedLabel = g
+  .append("text")
   .attr("class", "quadrant-label")
   .attr("x", (3 * width) / 4)
   .attr("y", height / 2 + 20)
-  .attr("text-anchor", "middle")
-  .text("Mature & Limited");
+  .attr("text-anchor", "middle");
+
+if (isMobile) {
+  matureLimitedLabel
+    .append("tspan")
+    .attr("x", (3 * width) / 4)
+    .attr("dy", 0)
+    .text("Mature &");
+  matureLimitedLabel
+    .append("tspan")
+    .attr("x", (3 * width) / 4)
+    .attr("dy", "1.0em")
+    .text("Limited Effectiveness");
+} else {
+  matureLimitedLabel.text("Mature & Limited Effectiveness");
+}
 
 // Axis tick labels
 g.append("text")
@@ -179,7 +217,7 @@ const points = g
   .append("circle")
   .attr("cx", (d) => xScale(d.x))
   .attr("cy", (d) => yScale(d.y))
-  .attr("r", isMobile ? 7 : 6)
+  .attr("r", isMobile ? 4 : 6)
   .attr("fill", (d) => categoryColors[d.category])
   .attr("stroke", "hsl(184, 30%, 85%)")
   .attr("stroke-width", 1)
@@ -251,72 +289,78 @@ g.append("line")
 // Create legend
 function createLegend() {
   const legendData = [
-    { label: 'Input', category: 'input' },
-    { label: 'Context', category: 'context' },
-    { label: 'Tools', category: 'tools' },
-    { label: 'Agents', category: 'agents' },
+    { label: "Input", category: "input" },
+    { label: "Context", category: "context" },
+    { label: "Tools", category: "tools" },
+    { label: "Agents", category: "agents" },
   ];
 
   if (isMobile) {
     // Mobile legend at bottom
     const mobileLegendGroup = svg
-      .append('g')
-      .attr('class', 'legend legend-mobile')
-      .attr('transform', `translate(${totalWidth / 2 - 120}, ${margin.top + height + 35})`);
+      .append("g")
+      .attr("class", "legend legend-mobile")
+      .attr(
+        "transform",
+        `translate(${totalWidth / 2 - 120}, ${margin.top + height + 40})`
+      );
 
     const mobileLegendItems = mobileLegendGroup
-      .selectAll('g')
+      .selectAll("g")
       .data(legendData)
       .enter()
-      .append('g')
-      .attr('transform', (d, i) => {
+      .append("g")
+      .attr("transform", (d, i) => {
         const row = Math.floor(i / 2);
         const col = i % 2;
         return `translate(${col * 120}, ${row * 20})`;
       });
 
     mobileLegendItems
-      .append('circle')
-      .attr('r', 5)
-      .attr('fill', d => categoryColors[d.category])
-      .style('opacity', 0.9);
+      .append("circle")
+      .attr("r", 5)
+      .attr("fill", (d) => categoryColors[d.category])
+      .style("opacity", 0.9);
 
     mobileLegendItems
-      .append('text')
-      .attr('x', 12)
-      .attr('y', 0)
-      .attr('dominant-baseline', 'middle')
-      .style('font-size', '0.75rem')
-      .style('fill', 'hsl(184, 30%, 85%)')
-      .text(d => d.label);
+      .append("text")
+      .attr("x", 12)
+      .attr("y", 0)
+      .attr("dominant-baseline", "middle")
+      .style("font-size", "0.75rem")
+      .style("fill", "hsl(184, 30%, 85%)")
+      .text((d) => d.label);
   } else {
     // Desktop legend on right side, positioned within the reserved margin space
     const desktopLegendGroup = svg
-      .append('g')
-      .attr('class', 'legend legend-desktop')
-      .attr('transform', `translate(${margin.left + width + 20}, ${margin.top + 20})`);
+      .append("g")
+      .attr("class", "legend legend-desktop")
+      .attr(
+        "transform",
+        `translate(${margin.left + width + 20}, ${margin.top + 20})`
+      );
 
     const desktopLegendItems = desktopLegendGroup
-      .selectAll('g')
+      .selectAll("g")
       .data(legendData)
       .enter()
-      .append('g')
-      .attr('transform', (d, i) => `translate(0, ${i * 25})`);
+      .append("g")
+      .attr("transform", (d, i) => `translate(0, ${i * 25})`);
 
     desktopLegendItems
-      .append('circle')
-      .attr('r', 5)
-      .attr('fill', d => categoryColors[d.category])
-      .style('opacity', 0.9);
+      .append("circle")
+      .attr("r", 5)
+      .attr("fill", (d) => categoryColors[d.category])
+      .style("opacity", 0.9);
 
     desktopLegendItems
-      .append('text')
-      .attr('x', 15)
-      .attr('y', 0)
-      .attr('dominant-baseline', 'middle')
-      .style('font-size', '0.8rem')
-      .style('fill', 'hsl(184, 30%, 85%)')
-      .text(d => d.label);
+      .append("text")
+      .attr("x", 15)
+      .attr("y", 0)
+      .attr("dominant-baseline", "middle")
+      .style("font-size", "0.8rem")
+      .style("fill", "hsl(184, 30%, 85%)")
+      .text((d) => d.label);
   }
 }
 
@@ -324,7 +368,7 @@ function createLegend() {
 createLegend();
 
 // Handle window resize for responsive behavior
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   const newIsMobile = window.innerWidth <= 767;
   if (newIsMobile !== isMobile) {
     location.reload(); // Simple reload for mobile/desktop switch

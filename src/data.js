@@ -28,8 +28,8 @@ export function generateData() {
     {
       name: "Rules / AGENT.md",
       category: "context",
-      x: 0.9, // Emerging (left side)
-      y: 1, // Limited Effectiveness (bottom)
+      x: 0.85, // Emerging (left side)
+      y: 0.9, // Limited Effectiveness (bottom)
       maturity: "emerging",
       effectiveness: "limited",
     },
@@ -37,7 +37,7 @@ export function generateData() {
       name: "Knowledge / Memory",
       category: "context",
       x: 0.65, // Emerging (left side)
-      y: 0.75, // Limited Effectiveness (bottom)
+      y: 0.7, // Limited Effectiveness (bottom)
       maturity: "emerging",
       effectiveness: "limited",
     },
@@ -54,7 +54,7 @@ export function generateData() {
       name: "MCP Servers",
       category: "tools",
       x: 0.8, // Emerging (left side)
-      y: 1.25, // Limited Effectiveness (bottom)
+      y: 1.2, // Limited Effectiveness (bottom)
       maturity: "emerging",
       effectiveness: "limited",
     },
@@ -79,7 +79,7 @@ export function generateData() {
       name: "Sub-Agents",
       category: "agents",
       x: 0.75, // Emerging (left side)
-      y: 1.1, // Limited Effectiveness (bottom)
+      y: 1.05, // Limited Effectiveness (bottom)
       maturity: "emerging",
       effectiveness: "limited",
     },
