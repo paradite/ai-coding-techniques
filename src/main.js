@@ -1,5 +1,13 @@
 import { generateData } from "./data.js";
 
+// Color scheme for categories
+const categoryColors = {
+  input: 'hsl(260, 60%, 65%)', // Purple
+  context: 'hsl(195, 60%, 65%)', // Blue
+  tools: 'hsl(120, 60%, 60%)', // Green
+  agents: 'hsl(30, 85%, 65%)', // Orange
+};
+
 const data = generateData();
 
 // Get CSS variables and detect mobile
@@ -8,13 +16,13 @@ const isMobile = window.innerWidth <= 767;
 
 const margin = {
   top: parseInt(rootStyles.getPropertyValue("--margin-top")),
-  right: isMobile ? 20 : parseInt(rootStyles.getPropertyValue("--margin-right")),
-  bottom: parseInt(rootStyles.getPropertyValue("--margin-bottom")),
+  right: isMobile ? 20 : parseInt(rootStyles.getPropertyValue("--margin-right-desktop")),
+  bottom: isMobile ? parseInt(rootStyles.getPropertyValue("--margin-bottom-mobile")) : parseInt(rootStyles.getPropertyValue("--margin-bottom")),
   left: isMobile ? 20 : parseInt(rootStyles.getPropertyValue("--margin-left")),
 };
 
 const totalWidth = isMobile ? window.innerWidth : parseInt(rootStyles.getPropertyValue("--viz-width-desktop"));
-const totalHeight = isMobile ? 300 : parseInt(rootStyles.getPropertyValue("--viz-height-desktop"));
+const totalHeight = isMobile ? parseInt(rootStyles.getPropertyValue("--viz-height-mobile")) : parseInt(rootStyles.getPropertyValue("--viz-height-desktop"));
 const width = totalWidth - margin.left - margin.right;
 const height = totalHeight - margin.top - margin.bottom;
 
@@ -172,11 +180,10 @@ const points = g
   .attr("cx", (d) => xScale(d.x))
   .attr("cy", (d) => yScale(d.y))
   .attr("r", isMobile ? 7 : 6)
-  .attr("fill", (d) =>
-    d.effectiveness === "effective" ? "hsl(132, 60%, 60%)" : "hsl(43, 85%, 65%)"
-  )
+  .attr("fill", (d) => categoryColors[d.category])
   .attr("stroke", "hsl(184, 30%, 85%)")
-  .attr("stroke-width", 1);
+  .attr("stroke-width", 1)
+  .style("opacity", 0.9);
 
 // Point labels
 g.selectAll(".point-label")
@@ -240,6 +247,81 @@ g.append("line")
   .attr("y2", height / 2)
   .attr("stroke", "hsl(184, 30%, 25%)")
   .attr("stroke-width", 1);
+
+// Create legend
+function createLegend() {
+  const legendData = [
+    { label: 'Input', category: 'input' },
+    { label: 'Context', category: 'context' },
+    { label: 'Tools', category: 'tools' },
+    { label: 'Agents', category: 'agents' },
+  ];
+
+  if (isMobile) {
+    // Mobile legend at bottom
+    const mobileLegendGroup = svg
+      .append('g')
+      .attr('class', 'legend legend-mobile')
+      .attr('transform', `translate(${totalWidth / 2 - 120}, ${margin.top + height + 35})`);
+
+    const mobileLegendItems = mobileLegendGroup
+      .selectAll('g')
+      .data(legendData)
+      .enter()
+      .append('g')
+      .attr('transform', (d, i) => {
+        const row = Math.floor(i / 2);
+        const col = i % 2;
+        return `translate(${col * 120}, ${row * 20})`;
+      });
+
+    mobileLegendItems
+      .append('circle')
+      .attr('r', 5)
+      .attr('fill', d => categoryColors[d.category])
+      .style('opacity', 0.9);
+
+    mobileLegendItems
+      .append('text')
+      .attr('x', 12)
+      .attr('y', 0)
+      .attr('dominant-baseline', 'middle')
+      .style('font-size', '0.75rem')
+      .style('fill', 'hsl(184, 30%, 85%)')
+      .text(d => d.label);
+  } else {
+    // Desktop legend on right side, positioned within the reserved margin space
+    const desktopLegendGroup = svg
+      .append('g')
+      .attr('class', 'legend legend-desktop')
+      .attr('transform', `translate(${margin.left + width + 20}, ${margin.top + 20})`);
+
+    const desktopLegendItems = desktopLegendGroup
+      .selectAll('g')
+      .data(legendData)
+      .enter()
+      .append('g')
+      .attr('transform', (d, i) => `translate(0, ${i * 25})`);
+
+    desktopLegendItems
+      .append('circle')
+      .attr('r', 5)
+      .attr('fill', d => categoryColors[d.category])
+      .style('opacity', 0.9);
+
+    desktopLegendItems
+      .append('text')
+      .attr('x', 15)
+      .attr('y', 0)
+      .attr('dominant-baseline', 'middle')
+      .style('font-size', '0.8rem')
+      .style('fill', 'hsl(184, 30%, 85%)')
+      .text(d => d.label);
+  }
+}
+
+// Create the legend
+createLegend();
 
 // Handle window resize for responsive behavior
 window.addEventListener('resize', () => {
